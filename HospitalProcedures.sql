@@ -122,3 +122,60 @@ BEGIN
         dbms_output.put_line('Taki pacient nie istnieje!');
 END;
 /
+--dodaj badanie
+CREATE OR REPLACE FUNCTION znajdz_pracownika(
+    imie_pracownika pracownik.imie%TYPE,
+    nazwisko_pracownika pracownik.nazwisko%TYPE
+    )
+    RETURN NUMBER
+    IS
+        tmp pracownik.id_pracownika%TYPE;    
+    BEGIN
+        SELECT p.id_pracownika INTO tmp FROM pracownik p WHERE p.imie = imie_pracownika AND p.nazwisko = nazwisko_pracownika;
+        IF tmp = 0 THEN
+            RAISE no_data_found;
+        ELSE RETURN tmp;
+        END IF;
+        EXCEPTION WHEN No_data_found THEN
+            RETURN 0;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE dodaj_badanie(
+    PESEL_pacjenta badanie.id_karty%TYPE,
+    wzrost_pacjenta badanie.wzrost%TYPE,
+    tetno_pacjenta badanie.tetno%TYPE,
+    uwagi_pacjenta badanie.uwagi%TYPE,
+    badanie_wstepne_pacjenta badanie.badanie_wstepne_flg%TYPE,
+    imie_pracownika pracownik.imie%TYPE,
+    nazwisko_pracownika pracownik.nazwisko%TYPE
+)
+IS
+    id_karty_pacjenta karta_choroby.id_karty%TYPE;
+    id_szukanego_pracownika pracownik.id_pracownika%TYPE;
+    karta_istnieje BOOLEAN;
+    nie_ma_karty EXCEPTION;
+    nie_ma_pracownika EXCEPTION;
+BEGIN
+    id_szukanego_pracownika := znajdz_pracownika(imie_pracownika,nazwisko_pracownika);
+    IF id_szukanego_pracownika = 0 THEN
+        RAISE nie_ma_pracownika;
+    ELSE
+        BEGIN
+        karta_istnieje := sprawdz_karte_choroby(PESEL_pacjenta);
+        IF karta_istnieje = TRUE THEN
+            RAISE nie_ma_karty;
+        ELSE
+            SELECT id_karty INTO id_karty_pacjenta FROM karta_choroby WHERE karta_choroby.pacjent = PESEL_pacjenta; 
+            INSERT INTO badanie VALUES(id_karty_pacjenta, id_szukanego_pracownika, sysdate, wzrost_pacjenta, tetno_pacjenta, uwagi_pacjenta, badanie_wstepne_pacjenta);
+        END IF;
+        EXCEPTION WHEN nie_ma_karty THEN 
+        dbms_output.ENABLE;
+        dbms_output.put_line('Nie ma takiego pacjenta');
+        END;
+    END IF; 
+    EXCEPTION WHEN nie_ma_pracownika THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Nie ma takiego pracownika');
+END;
+/
