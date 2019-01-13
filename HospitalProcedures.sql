@@ -179,3 +179,96 @@ BEGIN
         dbms_output.put_line('Nie ma takiego pracownika');
 END;
 /
+--dodaj zabieg
+CREATE OR REPLACE FUNCTION znajdz_sale(
+    p_numer_sali sala.numer_sali%TYPE
+)
+RETURN NUMBER
+IS
+    tmp sala.id_sali%TYPE;
+BEGIN
+    BEGIN
+        SELECT id_sali INTO tmp FROM sala WHERE p_numer_sali=sala.numer_sali;
+        EXCEPTION WHEN NO_DATA_FOUND THEN
+            tmp:=NULL;
+    END;
+    RETURN tmp;
+END;
+/
+
+CREATE OR REPLACE FUNCTION znajdz_rodzaj_sali(
+    p_id_sali sala.id_sali%TYPE
+)
+RETURN sala.rodzaj_sali%TYPE
+IS
+    tmp sala.rodzaj_sali%TYPE;
+BEGIN
+    SELECT rodzaj_sali INTO tmp FROM sala WHERE id_sali=p_id_sali;
+    RETURN tmp;
+END;
+/
+CREATE OR REPLACE FUNCTION znajdz_najwieksze_id_zabiegu
+RETURN zabiegi.id_zabiegu%TYPE
+IS 
+    tmp zabiegi.id_zabiegu%TYPE;
+BEGIN
+    SELECT MAX(id_zabiegu) INTO tmp FROM zabiegi;
+    IF tmp IS NULL THEN
+        tmp:=0;
+    END IF;
+    RETURN tmp;
+END;
+/
+CREATE OR REPLACE PROCEDURE dodaj_zabieg(
+    p_data_zabiegu zabiegi.data_zabiegu%TYPE,
+    p_typ_zabiegu zabiegi.typ_zabiegu%TYPE,
+    p_spodziewany_czas_trwania zabiegi.typ_zabiegu%TYPE,
+    p_numer_sali sala.numer_sali%TYPE
+)
+IS
+    tmp_data_poczatku zabiegi.data_zabiegu%TYPE;
+    tmp_data_konca zabiegi.spodziewany_czas_trwania%TYPE;
+    p_id_sali zabiegi.sala%TYPE;
+    p_id_zabiegu zabiegi.id_zabiegu%TYPE;
+    sala_zajeta EXCEPTION;
+    nie_ma_sali EXCEPTION;
+    sala_nie_zabiegowa EXCEPTION;
+    czas EXCEPTION;
+BEGIN
+    p_id_zabiegu:=znajdz_najwieksze_id_zabiegu();
+    p_id_zabiegu:=p_id_zabiegu+1;
+    p_id_sali:=znajdz_sale(p_numer_sali);
+    BEGIN
+        SELECT data_zabiegu INTO tmp_data_poczatku FROM zabiegi WHERE p_id_sali=sala;
+        SELECT spodziewany_czas_trwania INTO tmp_data_konca FROM zabiegi WHERE p_id_sali=sala;
+        EXCEPTION WHEN NO_DATA_FOUND THEN
+            tmp_data_poczatku:=NULL;
+            tmp_data_konca:=NULL;
+    END;
+    IF p_id_sali IS NULL THEN
+        RAISE nie_ma_sali;
+    ELSIF p_data_zabiegu>p_spodziewany_czas_trwania THEN
+        RAISE czas;
+    ELSIF znajdz_rodzaj_sali(p_id_sali) NOT LIKE 'Zabiegowe' AND znajdz_rodzaj_sali(p_id_sali) NOT LIKE 'Operacyjne' THEN
+        RAISE sala_nie_zabiegowa;
+    ELSIF (tmp_data_poczatku IS NOT NULL AND tmp_data_konca IS NOT NULL) OR (p_data_zabiegu>=tmp_data_poczatku AND p_data_zabiegu<=tmp_data_konca) OR p_spodziewany_czas_trwania>=tmp_data_poczatku THEN
+        RAISE sala_zajeta;
+    ELSE 
+        INSERT INTO zabiegi VALUES(p_id_zabiegu, p_data_zabiegu, p_typ_zabiegu, p_spodziewany_czas_trwania, p_id_sali);
+    END IF;
+    EXCEPTION WHEN sala_zajeta THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Ta sala jest juz zarezerwowana!');
+    WHEN nie_ma_sali THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Taka sala nie istnieje');
+    WHEN sala_nie_zabiegowa THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Wybrana sala nie jest zabiegowa!');
+    WHEN czas THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Data konca zabiegu nie moze byc mniejsza nic data poczatku');
+END;
+/
+EXEC dodaj_zabieg(TO_DATE('2019/01/14', 'YYYY/MM/DD'), 'leczenie', TO_DATE('2019/01/16', 'YYYY/MM/DD'), '2a');
+select * from zabiegi;
