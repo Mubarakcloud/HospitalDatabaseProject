@@ -12,11 +12,11 @@ app = Flask(__name__)
 def index():
     connection = cx_Oracle.connect(db_user, db_password, db_connect)
     cur = connection.cursor()
-    cur.execute("SELECT 'Witam w szpitalu' FROM DUAL")
+    cur.execute("SELECT 'Witam w szpitalu.' FROM DUAL")
     col = cur.fetchone()[0]
     cur.close()
     connection.close()
     return col
 
 if __name__ == '__main__':
-      app.run(host='0.0.0.0', port=8080) 
+      app.run(host='0.0.0.0', port=1337)
