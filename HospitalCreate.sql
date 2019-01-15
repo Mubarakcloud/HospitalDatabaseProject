@@ -36,7 +36,7 @@ CREATE TABLE pracownik (
 CREATE TABLE lekarz (
     id_lekarza NUMBER CONSTRAINT lekarz_pk PRIMARY KEY,
     id_pracownika NUMBER NOT NULL CONSTRAINT lekarz_pracownik_fk REFERENCES pracownik(id_pracownika),
-    specializacja VARCHAR2(20) NOT NULL,
+    specjalizacja VARCHAR2(20) NOT NULL,
     gabinet VARCHAR2(4) NOT NULL, --LUB NUMBER SAM NIE WIEM BO MOzE BYc POKoJ 120c
     miejsce_parkingowe VARCHAR2(4) --TO CO WYzEJ
 );

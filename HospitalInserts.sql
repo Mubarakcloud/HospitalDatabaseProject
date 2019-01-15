@@ -34,34 +34,34 @@ INSERT INTO oddzial VALUES (oddzial_id_seq.NEXTVAL, 'Paliacja', 'Kielce', 'Grunw
 -- Pracownicy
 
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Marian', 'Konewka', 'Konserwator', 2500, '111222333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Marianna', 'Konewka', 'Sprz¹taczka', 2500, '111222334');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 2, 'Zdzis³aw', 'Nowak', 'Konserwator', 2600, '543222333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 2, 'Kornel', 'Tutaj', 'Pielêgniarz', 2800, '111753333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Joanna', 'Papaj', 'Pielêgniarka', 2800, '111222412');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 'Kamil', 'Wakszmucki', 'Pielêgniarz', 2800, '111983333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Marianna', 'Konewka', 'Sprzï¿½taczka', 2500, '111222334');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 2, 'Zdzisï¿½aw', 'Nowak', 'Konserwator', 2600, '543222333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 2, 'Kornel', 'Tutaj', 'Pielï¿½gniarz', 2800, '111753333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Joanna', 'Papaj', 'Pielï¿½gniarka', 2800, '111222412');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 'Kamil', 'Wakszmucki', 'Pielï¿½gniarz', 2800, '111983333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Andrzej', 'Kolejarz', 'Ochroniacz', 2300, '532222333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Wac³aw', 'Tam', 'Ochroniarz', 2300, '111981333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Wacï¿½aw', 'Tam', 'Ochroniarz', 2300, '111981333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 5, 'Dawid', 'Szynka', 'Informatyk', 9999, '111324333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 6, 'Karolina', 'Strata', 'Sekretarka', 2900, '991222333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Wasilij', 'Papataj', 'Pielêgniarz', 2800, '854222412');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 'Antonina', 'Michalczyk', 'Pielêgniarka', 2800, '643983333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Wasilij', 'Papataj', 'Pielï¿½gniarz', 2800, '854222412');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 'Antonina', 'Michalczyk', 'Pielï¿½gniarka', 2800, '643983333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Dawid', 'Szynka', 'Ochroniacz', 2300, '532532333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Tomasz', 'Dobrych³op', 'Bazodanowiec', 9999, '765981976');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Tomasz', 'Dobrychï¿½op', 'Bazodanowiec', 9999, '765981976');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Karol', 'Marcinkowski', 'Technik', 3000, '331676333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 7, 'Magda', 'Pionel', 'Sekretarka', 2900, '991222999');
 
 
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Wies³aw', 'M¹czka', 'Lekarz', 6800, '987983333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 'Wiesï¿½aw', 'Mï¿½czka', 'Lekarz', 6800, '987983333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 2, 'Andrzej', 'Martyniuk', 'Lekarz', 6800, '532222333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 3, 'Karmil', 'Czekaj', 'Lekarz', 6800, '987981333');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 'Teresa', 'Witam', 'Lekarz', 6800, '111324999');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 5, 'Micha³', 'RzeŸnik', 'Lekarz', 6800, '991786333');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 6, 'Pawe³', 'Tombreno', 'Lekarz', 6800, '854563412');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 5, 'Michaï¿½', 'Rzeï¿½nik', 'Lekarz', 6800, '991786333');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 6, 'Paweï¿½', 'Tombreno', 'Lekarz', 6800, '854563412');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 7, 'Paulina', 'Stonoga', 'Lekarz', 6800, '643983757');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 8, 'Joanna', 'Kaszanka', 'Lekarz', 6800, '532532999');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 9, 'Diego', 'Manino', 'Lekarz', 6800, '974981976');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 'Marian', 'Pazera', 'Lekarz', 6800, '331676395');
-INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 11, 'Dorbromi³a', 'Ogieñ', 'Lekarz', 6800, '991864999');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 11, 'Dorbromiï¿½a', 'Ogieï¿½', 'Lekarz', 6800, '991864999');
 
 --lekarze
 
@@ -96,4 +96,4 @@ INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10b', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10c', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10d', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10e', 'Izolatka', 1, 10);
-INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 11, '11a', 'Zabiegowa', 10, 11);
+INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 11, '11a', 'Zabiegowe', 10, 11);
