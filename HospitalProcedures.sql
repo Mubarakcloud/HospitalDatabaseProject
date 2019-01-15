@@ -122,6 +122,50 @@ BEGIN
         dbms_output.put_line('Taki pacient nie istnieje!');
 END;
 /
+
+--wypisz pacjenta
+
+CREATE OR REPLACE PROCEDURE wypisz_pacjenta(PESEL_pacjenta karta_choroby.pacjent%TYPE)
+IS BEGIN
+    IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Pacjent nie istnieje lub został już wypisany');
+    ELSE 
+        UPDATE karta_choroby SET karta_choroby.data_wypisu = sysdate WHERE karta_choroby.pacjent = PESEL_pacjenta;
+    END IF;
+END;
+/
+
+--dodaj objawy lub diagnoze
+
+CREATE OR REPLACE PROCEDURE dodaj_diagnoze(
+    PESEL_pacjenta karta_choroby.pacjent%TYPE,
+    diagnoza_dla_pacjenta karta_choroby.diagnoza%TYPE
+    )
+IS BEGIN
+    IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Pacjent nie istnieje lub został już wypisany');
+    ELSE 
+        UPDATE karta_choroby SET karta_choroby.diagnoza = diagnoza_dla_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
+    END IF;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE dodaj_objawy(
+    PESEL_pacjenta karta_choroby.pacjent%TYPE,
+    objawy_pacjenta karta_choroby.objawy%TYPE
+    )
+IS BEGIN
+    IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Pacjent nie istnieje lub został już wypisany');
+    ELSE 
+        UPDATE karta_choroby SET karta_choroby.objawy = objawy_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
+    END IF;
+END;
+/
+
 --dodaj badanie
 CREATE OR REPLACE FUNCTION znajdz_pracownika(
     imie_pracownika pracownik.imie%TYPE,
