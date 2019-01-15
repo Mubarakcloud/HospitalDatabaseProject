@@ -272,3 +272,33 @@ END;
 /
 EXEC dodaj_zabieg(TO_DATE('2019/01/14', 'YYYY/MM/DD'), 'leczenie', TO_DATE('2019/01/16', 'YYYY/MM/DD'), '2a');
 select * from zabiegi;
+
+-- Wypisujemy pacjentów z diagnozą - zgon. 
+
+CREATE OR REPLACE PROCEDURE wypisz_martwych
+IS 
+    CURSOR martwi_pacjenci IS SELECT * FROM karta_choroby WHERE karta_choroby.diagnoza = 'Zgon' FOR UPDATE;
+BEGIN
+    FOR tmp IN martwi_pacjenci LOOP
+        UPDATE karta_choroby SET data_wypisu = SYSDATE WHERE CURRENT OF martwi_pacjenci;
+    END LOOP;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE karty_bez_badania_wstepnego
+IS
+    CURSOR karta_choroby_cur IS SELECT * FROM karta_choroby;
+    pacjent_bez_badania_wstepnego karta_choroby%ROWTYPE;
+    row_badanie badanie%ROWTYPE;
+BEGIN
+    FOR tmp IN karta_choroby_cur LOOP
+        pacjent_bez_badania_wstepnego := tmp;
+        SELECT * INTO row_badanie FROM badanie WHERE tmp.id_karty = badanie.id_karty;
+    END LOOP;
+EXCEPTION WHEN No_Data_Found THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstępnego.');    
+END;
+/
+
+CREATE 

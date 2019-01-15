@@ -62,7 +62,7 @@ CREATE TABLE pacjent (
     imie VARCHAR2(20) NOT NULL,
     nazwisko VARCHAR2(50) NOT NULL,
     data_rejestracji DATE DEFAULT SYSDATE  NOT NULL,
-    numer_telefonu VARCHAR(9)
+    numer_telefonu VARCHAR2(9)
 );
 
 CREATE TABLE karta_choroby (
@@ -73,7 +73,7 @@ CREATE TABLE karta_choroby (
     data_przyjecia DATE  DEFAULT SYSDATE NOT NULL,
     data_wypisu DATE DEFAULT SYSDATE,
     diagnoza VARCHAR2(100),
-    objawy VARCHAR(500)
+    objawy VARCHAR2(500)
 );
 
 CREATE TABLE badanie (
@@ -89,7 +89,7 @@ CREATE TABLE badanie (
 CREATE TABLE leki (
     id_leku NUMBER CONSTRAINT lek_pk PRIMARY KEY,
     nazwa_leku VARCHAR2(30) NOT NULL,
-    zalecanie_dawkowanie VARCHAR(20) NOT NULL,
+    zalecanie_dawkowanie VARCHAR2(20) NOT NULL,
     dostepnosc NUMBER NOT NULL CONSTRAINT dostepnosc_check CHECK(dostepnosc >=0),
     uwagi VARCHAR2(300)
 );
