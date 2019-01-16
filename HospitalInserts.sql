@@ -62,6 +62,11 @@ INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 8, 69062869271, 'Joanna'
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 9, 82102172779, 'Diego', 'Manino', 'Lekarz', 6800, '974981976');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 10, 76011152665, 'Marian', 'Pazera', 'Lekarz', 6800, '331676395');
 INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 11, 76112152365, 'Dorbromiła', 'Ogier', 'Lekarz', 6800, '991864999');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 5, 12334512376, 'Lena', 'Zielinska', 'Lekarz', 6500, '567103871');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 6, 97645601295, 'Jakub', 'Wójcik', 'Lekarz', 4500,'567982341');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 1, 68492058021,'Liliana', 'Malinowska', 'Lekarz', 7350, '656789123');
+INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 4, 90020896781, 'Maciej', 'Cybulski', 'Lekarz', 3000, '959402956');
+
 
 --lekarze
 
@@ -76,6 +81,10 @@ INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 24, 'Neonatologiczny', '150c',
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 25, 'Nefrologia', '150c', '142b');
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 26, 'Psychiatria', '150c', '142b');
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 27, 'Paliacja', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 28, 'Neurologia', '111c', '45');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 29, 'Laryngolog', '118a', '37');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 30, 'Ortopedia', '301', '46');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 31, 'Kardiolog', '291', '91');
 
 --sale
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 1, '1a', 'Zabiegowe', 10, 1);
