@@ -25,6 +25,7 @@ CREATE TABLE oddzial (
 CREATE TABLE pracownik (
     id_pracownika NUMBER CONSTRAINT pracownik_pk PRIMARY KEY,
     id_oddzialu NUMBER NOT NULL CONSTRAINT oddzial_pracownik_fk REFERENCES oddzial(id_oddzialu),
+    PESEL NUMBER(11) NOT NULL CONSTRAINT pracownik_pesel_unique UNIQUE,
     imie VARCHAR2(20) NOT NULL,
     nazwisko VARCHAR2(50) NOT NULL,
     stanowisko VARCHAR2(20) NOT NULL,
@@ -43,8 +44,8 @@ CREATE TABLE lekarz (
 
 CREATE TABLE dyzur (
     id_lekarza NUMBER NOT NULL CONSTRAINT lekarz_dyzur_fk REFERENCES lekarz(id_lekarza),
-    data_rozpoczecia DATE DEFAULT SYSDATE NOT NULL,
-    data_zakonczenia DATE,
+    data_rozpoczecia TIMESTAMP(0) DEFAULT SYSDATE NOT NULL,
+    data_zakonczenia TIMESTAMP(0),
     uwagi VARCHAR2(300)
 );
 
@@ -70,8 +71,8 @@ CREATE TABLE karta_choroby (
     pacjent NUMBER(11) NOT NULL CONSTRAINT karta_chorby_fk REFERENCES pacjent(PESEL),
     lekarz_prowadzacy NUMBER CONSTRAINT lekarz_prowadzacy_fk REFERENCES lekarz(id_lekarza),
     sala NUMBER NOT NULL CONSTRAINT karta_chory_sala_fk REFERENCES sala(id_sali),
-    data_przyjecia DATE  DEFAULT SYSDATE NOT NULL,
-    data_wypisu DATE DEFAULT SYSDATE,
+    data_przyjecia TIMESTAMP(0) DEFAULT SYSDATE NOT NULL,
+    data_wypisu TIMESTAMP(0) DEFAULT SYSDATE,
     diagnoza VARCHAR2(100),
     objawy VARCHAR2(500)
 );
@@ -79,7 +80,7 @@ CREATE TABLE karta_choroby (
 CREATE TABLE badanie (
     id_karty NOT NULL CONSTRAINT badanie_karta_fk REFERENCES karta_choroby(id_karty),
     id_pracownika NOT NULL CONSTRAINT badanie_pracownik_fk REFERENCES pracownik(id_pracownika),
-    data_badania DATE DEFAULT SYSDATE NOT NULL,
+    data_badania TIMESTAMP(0) DEFAULT SYSDATE NOT NULL,
     wzrost NUMBER(3) NOT NULL,
     tetno VARCHAR2(10) NOT NULL,
     uwagi VARCHAR2(300),
@@ -102,9 +103,9 @@ CREATE TABLE kart_lek (
 
 CREATE TABLE zabiegi (
     id_zabiegu NUMBER CONSTRAINT zabiegi_pk PRIMARY KEY,
-    data_zabiegu DATE DEFAULT SYSDATE NOT NULL,
+    data_zabiegu TIMESTAMP(0) DEFAULT SYSDATE NOT NULL,
     typ_zabiegu VARCHAR2(20) NOT NULL,
-    spodziewany_czas_trwania DATE NOT NULL,
+    spodziewane_zakonczenie TIMESTAMP(0) NOT NULL,
     sala NUMBER NOT NULL CONSTRAINT zabieg_sala_fk REFERENCES sala(id_sali)
 );
 
