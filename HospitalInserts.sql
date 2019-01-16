@@ -65,17 +65,17 @@ INSERT INTO pracownik VALUES (pracownik_id_seq.NEXTVAL, 11, 76112152365, 'Dorbro
 
 --lekarze
 
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 1, 'Pediatria', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 2, 'Chirurgia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 3, 'Okulistyka', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 4, 'Kardiologia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 5, 'Neurologia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 6, 'Laryngologia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 7, 'Ortopedia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 8, 'Neonatologiczny', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 9, 'Nefrologia', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 10, 'Psychiatria', '150c', '142b');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 11, 'Paliacja', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 17, 'Pediatria', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 18, 'Chirurgia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 19, 'Okulistyka', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 20, 'Kardiologia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 21, 'Neurologia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 22, 'Laryngologia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 23, 'Ortopedia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 24, 'Neonatologiczny', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 25, 'Nefrologia', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 26, 'Psychiatria', '150c', '142b');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 27, 'Paliacja', '150c', '142b');
 
 --sale
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 1, '1a', 'Zabiegowe', 10, 1);
@@ -97,3 +97,26 @@ INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10c', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10d', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 10, '10e', 'Izolatka', 1, 10);
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 11, '11a', 'Zabiegowe', 10, 11);
+
+--Pacjenci
+
+INSERT INTO Pacjent VALUES (87030836913, 'Andrzej', 'Komoda', TO_DATE('2019/01/01', 'yyyy/mm/dd'), '547043400');
+INSERT INTO Pacjent VALUES (67061098799, 'Kacper', 'Kołodziejczyk', TO_DATE('2018/12/19', 'yyyy/mm/dd'), '467086537');
+INSERT INTO Pacjent VALUES (83060349216, 'Antoni', 'Czerwiec', TO_DATE('2017/01/12', 'yyyy/mm/dd'), '782579803');
+INSERT INTO Pacjent VALUES (90082265516, 'Leszek', 'Kropydlak', TO_DATE('2016/12/23', 'yyyy/mm/dd'), '263214944');
+INSERT INTO Pacjent VALUES (69100469296, 'Kilian', 'Fallens', TO_DATE('2018/11/09', 'yyyy/mm/dd'), '863214945');
+INSERT INTO Pacjent VALUES (72101999152, 'Ryszard', 'Skanu', TO_DATE('2018/08/02', 'yyyy/mm/dd'), '569523585');
+INSERT INTO Pacjent VALUES (84010867194, 'Arkadiusz', 'Szybczak', TO_DATE('2018/07/09', 'yyyy/mm/dd'), '569443585');
+INSERT INTO Pacjent VALUES (87061092623, 'Hanna', 'Mostowiak', TO_DATE('2017/07/12', 'yyyy/mm/dd'), '367330735');
+INSERT INTO Pacjent VALUES (99122599541, 'Anna', 'Jurczak', TO_DATE('2019/01/08', 'yyyy/mm/dd'), '553221648');
+INSERT INTO Pacjent VALUES (54112977426, 'Janina', 'Kostecka', TO_DATE('2018/11/12', 'yyyy/mm/dd'), '67756728');
+INSERT INTO Pacjent VALUES (73082781622, 'Bogusława', 'Linda', TO_DATE('2018/02/14', 'yyyy/mm/dd'), '866685659');
+INSERT INTO Pacjent VALUES (73102672925, 'Rozalia', 'Cyrkon', TO_DATE('2019/01/02', 'yyyy/mm/dd'), '382371863');
+INSERT INTO Pacjent VALUES (53070577686, 'Iwona', 'Kajzerka', TO_DATE('2017/01/13', 'yyyy/mm/dd'), '995126457');
+INSERT INTO Pacjent VALUES (90061259387, 'Anna', 'Fatygowa', TO_DATE('2018/12/12', 'yyyy/mm/dd'), '266663539');
+INSERT INTO Pacjent VALUES (85062869592, 'Kacper', 'Kordełka', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '352856740');
+INSERT INTO Pacjent VALUES (51101212652, 'Magda', 'Wressler', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '777771216');
+
+--Karta choroby
+
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87030836913,  4, 6, TO_DATE('2019/01/01 12-41', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Mocny ból głowy, wysokie ciśnienie');
