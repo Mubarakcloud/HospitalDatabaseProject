@@ -127,16 +127,18 @@ INSERT INTO Pacjent VALUES (85062869592, 'Kacper', 'Kordełka', TO_DATE('2016/09
 INSERT INTO Pacjent VALUES (51101212652, 'Magda', 'Wressler', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '777771216');
 
 --Karta choroby
-
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87030836913,  4, 6, TO_DATE('2019/01/01 12-41', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Mocny ból głowy, wysokie ciśnienie');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 83060349216,  11, 6, TO_DATE('2017/01/12 22-41', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/01/14 12-00', 'yyyy/mm/dd HH24-MI'), 'Zatrucie alkoholowe', 'Wymioty, badaczka');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 83060349216,  11, 6, TO_DATE('2019/01/01 20-33', 'yyyy/mm/dd HH24-MI'), TO_DATE('2019/01/03 12-00', 'yyyy/mm/dd HH24-MI'), 'Zatrucie alkoholowe', 'Wymioty, badaczka');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 67061098799,  5, 7, TO_DATE('2018/12/19 07-21', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Gorączka, silne bóle, agresja');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 51101212652, 15, 6, TO_DATE('2016/09/11 17-41', 'yyyy/mm/dd HH24-MI'), TO_DATE('2016/09/11 19-41', 'yyyy/mm/dd HH24-MI'), 'Symulacja choroby', 'Duszności, ból w klatce piersiowej');
 INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 90082265516,  9, 13, TO_DATE('2016/12/23 11-29', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/01/03 08-00', 'yyyy/mm/dd HH24-MI'), 'Kamienie nerkowe', 'Silny ból przy oddawaniu moczu');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 69100469296,  6, 10, TO_DATE('2018/11/09 07-59', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/12/24 15-00', 'yyyy/mm/dd HH24-MI'), 'Zaawansowany rak krtani', 'Krwawienie podczas kaszlu');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 72101999152,  6, 8, TO_DATE('2018/08/02 03-59', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/08/14 15-00', 'yyyy/mm/dd HH24-MI'), 'Ciało obce w krtani', 'Silny ból podczas oddychania i przełykania');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 83060349216,  11, 6, TO_DATE('2017/01/12 22-41', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/01/14 12-00', 'yyyy/mm/dd HH24-MI'), 'Zatrucie alkoholowe', 'Wymioty, padaczka');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87061092623, 10, 14, TO_DATE('2017/07/12 14-14', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/07/12 16-20', 'yyyy/mm/dd HH24-MI'), 'Nie stwierdzono choroby', 'Pacjentka twierdzi, że ma wizje, że umrze za 10 dni');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87061092623, 11, 19, TO_DATE('2017/07/22 13-34', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/07/22 17-34', 'yyyy/mm/dd HH24-MI'), 'Zgon', 'Brak przytomości, prawdopodobnie pęknięty krwiak');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 73082781622, 14, 1, TO_DATE('2018/02/14 11-10', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/02/15 11-10', 'yyyy/mm/dd HH24-MI'), 'Stłuczenie', 'Silny ból lewego biodra');
 INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 84010867194, 7, 11, TO_DATE('2018/07/09 13-13', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/07/10 15-00', 'yyyy/mm/dd HH24-MI'), 'Złamanie kości lewej promieniowej', 'Złamanie kości lewej promieniowej');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87061092623, 10, 11, TO_DATE('2017/07/12 14-14', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/07/12 16-20', 'yyyy/mm/dd HH24-MI'), 'Nie stwierdzono choroby', 'Pacjentka twierdzi, że ma wizje, że umrze za 10 dni');
-INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87061092623, 11, 6, TO_DATE('2017/07/22 13-34', 'yyyy/mm/dd HH24-MI'), TO_DATE('2017/07/22 17-34', 'yyyy/mm/dd HH24-MI'), 'Zgon', 'Brak przytomości, prawdopodobnie pęknięty krwiak');
-
-
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 72101999152,  6, 8, TO_DATE('2018/08/02 03-59', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/08/14 15-00', 'yyyy/mm/dd HH24-MI'), 'Ciało obce w krtani', 'Silny ból podczas oddychania i przełykania');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 69100469296,  6, 10, TO_DATE('2018/11/09 07-59', 'yyyy/mm/dd HH24-MI'), TO_DATE('2018/12/24 15-00', 'yyyy/mm/dd HH24-MI'), 'Zaawansowany rak krtani', 'Krwawienie podczas kaszlu');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 87030836913,  4, 6, TO_DATE('2019/01/01 12-41', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Mocny ból głowy, wysokie ciśnienie');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 83060349216,  11, 6, TO_DATE('2019/01/01 20-33', 'yyyy/mm/dd HH24-MI'), TO_DATE('2019/01/03 12-00', 'yyyy/mm/dd HH24-MI'), 'Zatrucie alkoholowe', 'Wymioty, padaczka');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 73102672925, 3, 5, TO_DATE('2019/01/02 21-10', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Silny ból lewego oka');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 99122599541, 2, 2, TO_DATE('2019/01/08 18-20', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Silny ból brzucha, częste wymioty');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 67061098799,  5, 7, TO_DATE('2018/12/19 07-21', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Gorączka, silne bóle, agresja');
+INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 51101212652, 15, 6, TO_DATE('2019/01/16 11-00', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Duszności, ból w klatce piersiowej');
