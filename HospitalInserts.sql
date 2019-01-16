@@ -82,9 +82,9 @@ INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 25, 'Nefrologia', '150c', '142
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 26, 'Psychiatria', '150c', '142b');
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 27, 'Paliacja', '150c', '142b');
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 28, 'Neurologia', '111c', '45');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 29, 'Laryngolog', '118a', '37');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 29, 'Laryngologia', '118a', '37');
 INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 30, 'Ortopedia', '301', '46');
-INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 31, 'Kardiolog', '291', '91');
+INSERT INTO lekarz VALUES (lekarz_id_seq.NEXTVAL, 31, 'Kardiologia', '291', '91');
 
 --sale
 INSERT INTO sala VALUES (sala_id_seq.NEXTVAL, 1, '1a', 'Zabiegowe', 10, 1);
