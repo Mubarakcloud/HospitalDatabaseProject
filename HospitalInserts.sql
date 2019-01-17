@@ -142,3 +142,38 @@ INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 73102672925, 3, 5, TO_DA
 INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 99122599541, 2, 2, TO_DATE('2019/01/08 18-20', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Silny ból brzucha, częste wymioty');
 INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 67061098799,  5, 7, TO_DATE('2018/12/19 07-21', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Gorączka, silne bóle, agresja');
 INSERT INTO karta_choroby VALUES (karta_id_seq.NEXTVAL, 51101212652, 15, 6, TO_DATE('2019/01/16 11-00', 'yyyy/mm/dd HH24-MI'), NULL, NULL, 'Duszności, ból w klatce piersiowej');
+
+--Leki
+
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Adrenalina WZF', '300 µg/0,3 ml', 200, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Antytoksyna botulinowa ABE', '5000 j.m', 10, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Asentra', '100 mg', 15, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Benodil', '0,125 mg/ml', 0, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Bepanthen Eye', ' ', 5, 'Jedno opakowanie blisko końca daty przydatnści');
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Biseptol', '240 mg/5 ml', 23, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Bunondol (tabletki)', '0,2 mg', 30, NULL); --Przeciwbólowy
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Bunondol (zastrzyki)', '0,2 mg', 30, NULL); --Przeciwbólowy
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Galvus', '50 mg', 0, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'GalvuGeloplasma', '100 ml', 3, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Desloratadine Genoptim', ' 0,5 mg/ml', 7, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Detreman', '1 mg', 8, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Lercan', '10 mg', 2, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Raevretan', '3mg', 7, NULL);
+INSERT INTO leki VALUES(lek_id_seq.NEXTVAL, 'Opelol', '20 ml/2mg', 13, NULL);
+
+--Lek-Pacj
+INSERT INTO kart_lek VALUES(4, 3, '100mg');
+INSERT INTO kart_lek VALUES(4, 3, '200mg');
+INSERT INTO kart_lek VALUES(2, 6, '240mg');
+INSERT INTO kart_lek VALUES(5, 1, '300 µg');
+INSERT INTO kart_lek VALUES(8, 7, '0,1 mg');
+INSERT INTO kart_lek VALUES(8, 1, '300 µg');
+INSERT INTO kart_lek VALUES(3, 15, '1 mg');
+INSERT INTO kart_lek VALUES(14, 7, '0,1 mg');
+INSERT INTO kart_lek VALUES(5, 14, '3mg');
+INSERT INTO kart_lek VALUES(1, 7, '0.2mg');
+INSERT INTO kart_lek VALUES(11, 2, '0.5 mg');
+INSERT INTO kart_lek VALUES(4, 5, '1 mg');
+INSERT INTO kart_lek VALUES(6, 8, '0.2 mg');
+INSERT INTO kart_lek VALUES(7, 10, '100 ml');
+INSERT INTO kart_lek VALUES(13, 6, '240 mg');
