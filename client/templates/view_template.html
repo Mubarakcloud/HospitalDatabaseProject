@@ -1,0 +1,11 @@
+<!doctype html>
+
+<h2>{{ view }}</h2>
+
+{% for col in cols %}
+    <p>
+        {% for el  in col %}
+            {{ el }}
+        {% endfor %}
+    </p>
+{% endfor %}

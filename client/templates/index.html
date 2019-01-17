@@ -1,0 +1,14 @@
+<!doctype html>
+
+<h2>Witamy w szalonym szpitalu.<h2>
+
+<h3>Nasze widoki </h3>
+
+<form action="/views" method="POST">
+    <select name="view_name" required>
+        {% for option  in view_options %}
+            <option value="{{ option[0] }}">{{ option[0] }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Submit">
+</form>
