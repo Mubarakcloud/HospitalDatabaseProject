@@ -49,15 +49,27 @@ def views():
       return render_template("view_template.html", 
                               cols=columns, view=current_view) # Need to escape?
 
-@app.route('/procedures')
-def procedures():
-      connection = cx_Oracle.connect(db_user, db_password, db_connect)
-      current_view = request.args.get('name').upper()
-      if current_view == None:
-            return "Didn't specify view."
-      
 
+@app.route("/query", methods=["POST"])
+def query():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+      query_text = request.form['query']
+      print(query_text)
+      if query_text == None:
+            return "Didn't enter query"
+
+      cursor = connection.cursor()
+      cursor.execute(' ' + query_text)
+      columns = cursor.fetchall()
+      cursor.close()
       connection.close()
+      return render_template("view_template.html", 
+                              cols=columns, 
+                              view="""Thank you for using custom query functionality. 
+                                    Please do not abuse it.""")
+
 
 
 if __name__ == '__main__':
