@@ -158,7 +158,7 @@ CREATE OR REPLACE PROCEDURE wypisz_pacjenta(PESEL_pacjenta karta_choroby.pacjent
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zostaÂ³ juÂ¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.data_wypisu = sysdate WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -174,7 +174,7 @@ CREATE OR REPLACE PROCEDURE dodaj_diagnoze(
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zostaÂ³ juÂ¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.diagnoza = diagnoza_dla_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -188,7 +188,7 @@ CREATE OR REPLACE PROCEDURE dodaj_objawy(
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zostaÂ³ juÂ¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.objawy = objawy_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -197,60 +197,67 @@ END;
 
 --dodaj badanie
 CREATE OR REPLACE FUNCTION znajdz_pracownika(
-    imie_pracownika pracownik.imie%TYPE,
-    nazwisko_pracownika pracownik.nazwisko%TYPE
+    PESEL_pracownika pracownik.PESEL%TYPE
     )
-    RETURN NUMBER
+    RETURN BOOLEAN
     IS
-        tmp pracownik.id_pracownika%TYPE;    
+        tmp pracownik.id_pracownika%TYPE := 0;    
     BEGIN
-        SELECT p.id_pracownika INTO tmp FROM pracownik p WHERE p.imie = imie_pracownika AND p.nazwisko = nazwisko_pracownika;
+        SELECT p.PESEL INTO tmp FROM pracownik p WHERE p.PESEL = PESEL_pracownika;
         IF tmp = 0 THEN
-            RAISE no_data_found;
-        ELSE RETURN tmp;
+            RETURN FALSE;
+        ELSE 
+            RETURN TRUE;
         END IF;
-        EXCEPTION WHEN No_data_found THEN
-            RETURN 0;
+        EXCEPTION WHEN no_data_found THEN
+            RETURN FALSE;
+
 END;
 /
 
 CREATE OR REPLACE PROCEDURE dodaj_badanie(
-    PESEL_pacjenta badanie.id_karty%TYPE,
+    data_badania badanie.data_badania%TYPE,
+    PESEL_pacjenta karta_choroby.pacjent%TYPE,
     wzrost_pacjenta badanie.wzrost%TYPE,
     tetno_pacjenta badanie.tetno%TYPE,
     uwagi_pacjenta badanie.uwagi%TYPE,
     badanie_wstepne_pacjenta badanie.badanie_wstepne_flg%TYPE,
-    imie_pracownika pracownik.imie%TYPE,
-    nazwisko_pracownika pracownik.nazwisko%TYPE
+    PESEL_pracownika pracownik.PESEL%TYPE
 )
 IS
-    id_karty_pacjenta karta_choroby.id_karty%TYPE;
-    id_szukanego_pracownika pracownik.id_pracownika%TYPE;
+    id_karty_pacjenta karta_choroby.id_karty%TYPE := 0;
+    czy_pracownik_istnieje BOOLEAN;
     karta_istnieje BOOLEAN;
+    id_znalezionego_pracownika NUMBER;
     nie_ma_karty EXCEPTION;
     nie_ma_pracownika EXCEPTION;
 BEGIN
-    id_szukanego_pracownika := znajdz_pracownika(imie_pracownika,nazwisko_pracownika);
-    IF id_szukanego_pracownika = 0 THEN
+   czy_pracownik_istnieje := znajdz_pracownika(PESEL_pracownika);
+    IF czy_pracownik_istnieje = FALSE THEN
         RAISE nie_ma_pracownika;
     ELSE
         BEGIN
-        karta_istnieje := sprawdz_karte_choroby(PESEL_pacjenta);
-        IF karta_istnieje = TRUE THEN
-            RAISE nie_ma_karty;
-        ELSE
-            SELECT id_karty INTO id_karty_pacjenta FROM karta_choroby WHERE karta_choroby.pacjent = PESEL_pacjenta; 
-            INSERT INTO badanie VALUES(id_karty_pacjenta, id_szukanego_pracownika, sysdate, wzrost_pacjenta, tetno_pacjenta, uwagi_pacjenta, badanie_wstepne_pacjenta);
-        END IF;
-        EXCEPTION WHEN nie_ma_karty THEN 
-        dbms_output.ENABLE;
-        dbms_output.put_line('Nie ma takiego pacjenta');
+            karta_istnieje := sprawdz_karte_choroby(PESEL_pacjenta);
+            IF karta_istnieje = TRUE THEN
+                RAISE nie_ma_karty;
+            ELSE
+                SELECT id_karty INTO id_karty_pacjenta FROM karta_choroby WHERE karta_choroby.pacjent = PESEL_pacjenta AND karta_choroby.data_wypisu IS NULL; 
+                SELECT id_pracownika INTO id_znalezionego_pracownika FROM pracownik WHERE pracownik.PESEL = PESEL_pracownika;
+                INSERT INTO badanie VALUES(id_karty_pacjenta, id_znalezionego_pracownika, data_badania, wzrost_pacjenta, tetno_pacjenta, uwagi_pacjenta, badanie_wstepne_pacjenta);
+            END IF;
+            EXCEPTION WHEN nie_ma_karty THEN 
+                dbms_output.ENABLE;
+                dbms_output.put_line('Nie ma takiego pacjenta');
+            WHEN no_data_found THEN
+               dbms_output.ENABLE;
+                dbms_output.put_line('Nie ma takiego pacjenta'); 
         END;
     END IF; 
     EXCEPTION WHEN nie_ma_pracownika THEN
         dbms_output.ENABLE;
         dbms_output.put_line('Nie ma takiego pracownika');
 END;
+/
 /
 */
 --dodaj zabieg
@@ -386,7 +393,7 @@ END;
 /
 
 EXEC dodaj_zabieg(to_timestamp('20/01/2019 16:30', 'dd-mm-yyyy hh24:mi:ss'), 'leczenie', to_timestamp('20/01/2019 17:30', 'dd-mm-yyyy hh24:mi:ss'), '4a', 84070986833);
--- Wypisujemy pacjentów z diagnoz¹ - zgon. 
+-- Wypisujemy pacjentÃ³w z diagnozÂ¹ - zgon. 
 CREATE OR REPLACE PROCEDURE wypisz_martwych
 IS 
     CURSOR martwi_pacjenci IS SELECT * FROM karta_choroby WHERE karta_choroby.diagnoza = 'Zgon' FOR UPDATE;
@@ -409,7 +416,7 @@ BEGIN
     END LOOP;
 EXCEPTION WHEN No_Data_Found THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstêpnego.');    
+        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstÃªpnego.');    
 END;
 /
 
