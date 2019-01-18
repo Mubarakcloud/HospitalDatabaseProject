@@ -9,7 +9,8 @@
         {% for option  in view_options %}
             <option value="{{ option[0] }}">{{ option[0] }}</option>
         {% endfor %}
-    </select>
+    </select><br>
+    Dodatkowy parametr: <input type="text" name="parameter">
     <input type="submit" value="Submit">
 </form>
 
@@ -32,4 +33,18 @@
     <input type="submit" value="Submit">
 </form>
 
+<br>
+<h3>Przyjmij pacjenta</h3>
 
+<form action="/receive_patient" method="POST">
+    PESEL: <input type="number" name="patient_id" required><br>
+    ODDZIAL: <input type="text" name="patient_ward" required><br>
+    SALA: <input type="text" name="patient_room" required><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Dodaj dodatek premium</h3>
+
+<form action="/add_money">
+    <input type="Submit" value="Submit">

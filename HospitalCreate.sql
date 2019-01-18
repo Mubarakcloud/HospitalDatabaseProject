@@ -30,7 +30,8 @@ CREATE TABLE pracownik (
     nazwisko VARCHAR2(50) NOT NULL,
     stanowisko VARCHAR2(20) NOT NULL,
     wynagrodzenie NUMBER NOT NULL CONSTRAINT wynagrodzenie_check CHECK(wynagrodzenie > 0 AND wynagrodzenie < 99999),
-    numer_telefonu VARCHAR2(9)
+    numer_telefonu VARCHAR2(9),
+    premia NUMBER DEFAULT 0
 );
 
 
@@ -70,7 +71,7 @@ CREATE TABLE karta_choroby (
     id_karty NUMBER CONSTRAINT karta_chorby_pk PRIMARY KEY,
     pacjent NUMBER(11) NOT NULL CONSTRAINT karta_chorby_fk REFERENCES pacjent(PESEL),
     lekarz_prowadzacy NUMBER CONSTRAINT lekarz_prowadzacy_fk REFERENCES lekarz(id_lekarza),
-    sala NUMBER NOT NULL CONSTRAINT karta_chory_sala_fk REFERENCES sala(id_sali),
+    sala NUMBER CONSTRAINT karta_chory_sala_fk REFERENCES sala(id_sali),
     data_przyjecia TIMESTAMP(0) DEFAULT SYSDATE NOT NULL,
     data_wypisu TIMESTAMP(0) DEFAULT SYSDATE,
     diagnoza VARCHAR2(100),

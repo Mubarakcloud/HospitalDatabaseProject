@@ -345,4 +345,23 @@ EXCEPTION WHEN No_Data_Found THEN
 END;
 /
 
-CREATE 
+CREATE OR REPLACE PROCEDURE dodatek_dyzurowy
+IS
+    CURSOR dyz_cur (id_szuk_lekarza NUMBER) IS 
+    SELECT EXTRACT(hour FROM (data_zakonczenia - data_rozpoczecia)) godziny, id_lekarza FROM dyzur
+    WHERE dyzur.id_lekarza = id_szuk_lekarza AND
+    EXTRACT(month from dyzur.data_zakonczenia) = EXTRACT(month FROM SYSDATE);
+    CURSOR lek_cur IS SELECT * FROM lekarz l;
+    liczba_godzin NUMBER := 0;
+BEGIN
+    FOR tmp_lek IN lek_cur LOOP
+        liczba_godzin := 0;
+        FOR tmp_dyz IN dyz_cur(tmp_lek.id_lekarza) LOOP
+            liczba_godzin := liczba_godzin + tmp_dyz.godziny;
+        END LOOP;
+        IF liczba_godzin > 22 THEN
+            UPDATE pracownik SET premia = 200 WHERE tmp_lek.id_pracownika = id_pracownika;
+        END IF;
+    END LOOP;
+END;
+/
