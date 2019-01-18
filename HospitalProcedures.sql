@@ -18,6 +18,7 @@ BEGIN
         INSERT INTO pacjent VALUES (PESEL_pacjenta, imie_pacjenta, nazwisko_pacjenta, sysdate, numer_telefonu_pacjenta);
 END;
 /
+
 --Przyjmowanie pacjenta
 CREATE OR REPLACE FUNCTION uzyskaj_id_oddzialu (nazwa_szukanego_oddzialu oddzial.nazwa_oddzialu%TYPE)
 RETURN oddzial.id_oddzialu%TYPE
@@ -74,6 +75,34 @@ BEGIN
     ELSE wynik := FALSE;
     END IF;
     RETURN wynik;
+END;
+/
+
+CREATE OR REPLACE FUNCTION dodaj_sale (
+    PESEL_pacjenta pacjent.PESEL%TYPE,
+    nazwa_oddzialu_pacjenta oddzial.nazwa_oddzialu%TYPE,
+    numer_sali_pacjenta sala.numer_sali%TYPE
+)
+RETURN NUMBER
+IS
+    problem_sala EXCEPTION;
+    id_szuk_sali NUMBER;
+    tmp_pacjent pacjent%rowtype;
+BEGIN
+    SELECT * INTO tmp_pacjent FROM pacjent WHERE pacjent.pesel = PESEL_pacjenta;
+    id_szuk_sali := szukaj_sali(nazwa_oddzialu_pacjenta, numer_sali_pacjenta);
+    IF id_szuk_sali <= 0 THEN
+        raise problem_sala;
+    ELSE
+        UPDATE karta_choroby SET sala = id_szuk_sali WHERE karta_choroby.pacjent = PESEL_pacjenta;
+    END IF;
+
+    return 0;
+
+EXCEPTION WHEN No_data_found THEN
+    return -3;
+WHEN problem_sala THEN
+    return id_szuk_sali - 1;
 END;
 /
 
