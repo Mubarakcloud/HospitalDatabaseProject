@@ -158,7 +158,7 @@ CREATE OR REPLACE PROCEDURE wypisz_pacjenta(PESEL_pacjenta karta_choroby.pacjent
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zostaÅ‚ juÅ¼ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.data_wypisu = sysdate WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -174,7 +174,7 @@ CREATE OR REPLACE PROCEDURE dodaj_diagnoze(
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zostaÅ‚ juÅ¼ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.diagnoza = diagnoza_dla_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -188,7 +188,7 @@ CREATE OR REPLACE PROCEDURE dodaj_objawy(
 IS BEGIN
     IF sprawdz_karte_choroby(PESEL_pacjenta) THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent nie istnieje lub zostaÅ‚ juÅ¼ wypisany');
+        dbms_output.put_line('Pacjent nie istnieje lub zosta³ ju¿ wypisany');
     ELSE 
         UPDATE karta_choroby SET karta_choroby.objawy = objawy_pacjenta WHERE karta_choroby.pacjent = PESEL_pacjenta;
     END IF;
@@ -252,6 +252,7 @@ BEGIN
         dbms_output.put_line('Nie ma takiego pracownika');
 END;
 /
+*/
 --dodaj zabieg
 CREATE OR REPLACE FUNCTION znajdz_sale(
     p_numer_sali sala.numer_sali%TYPE
@@ -292,43 +293,80 @@ BEGIN
     RETURN tmp;
 END;
 /
+CREATE OR REPLACE FUNCTION znajdz_id_pracownika(
+    p_pesel pracownik.PESEL%TYPE
+)
+RETURN pracownik.id_pracownika%TYPE
+IS
+    tmp pracownik.id_pracownika%TYPE;
+BEGIN
+    SELECT id_pracownika INTO tmp FROM pracownik WHERE PESEL=p_pesel;
+    IF tmp IS NULL THEN
+        tmp:=0;
+    END IF;
+    RETURN tmp;
+END;
+/
+CREATE OR REPLACE FUNCTION znajdz_stanowisko(
+    p_id_pracownika pracownik.id_pracownika%TYPE
+)
+RETURN pracownik.stanowisko%TYPE
+IS
+    tmp pracownik.stanowisko%TYPE;
+BEGIN
+    SELECT stanowisko INTO tmp FROM pracownik WHERE id_pracownika=p_id_pracownika;
+    RETURN tmp;
+END;
+/
 CREATE OR REPLACE PROCEDURE dodaj_zabieg(
     p_data_zabiegu zabiegi.data_zabiegu%TYPE,
     p_typ_zabiegu zabiegi.typ_zabiegu%TYPE,
-    p_spodziewany_czas_trwania zabiegi.typ_zabiegu%TYPE,
-    p_numer_sali sala.numer_sali%TYPE
+    p_spodziewane_zakonczenie zabiegi.spodziewane_zakonczenie%TYPE,
+    p_numer_sali sala.numer_sali%TYPE,
+    p_pesel_lekarza pracownik.PESEL%TYPE
 )
 IS
     tmp_data_poczatku zabiegi.data_zabiegu%TYPE;
-    tmp_data_konca zabiegi.spodziewany_czas_trwania%TYPE;
+    tmp_koniec zabiegi.spodziewane_zakonczenie%TYPE;
     p_id_sali zabiegi.sala%TYPE;
     p_id_zabiegu zabiegi.id_zabiegu%TYPE;
+    p_id_prowadzacego pracownik.id_pracownika%TYPE;
+    cursor cur_data_poczatku is select data_zabiegu from zabiegi where p_id_sali=sala;
+    cursor cur_koniec is select spodziewane_zakonczenie from zabiegi where p_id_sali=sala;
     sala_zajeta EXCEPTION;
     nie_ma_sali EXCEPTION;
     sala_nie_zabiegowa EXCEPTION;
     czas EXCEPTION;
+    nie_lekarz EXCEPTION;
 BEGIN
     p_id_zabiegu:=znajdz_najwieksze_id_zabiegu();
     p_id_zabiegu:=p_id_zabiegu+1;
     p_id_sali:=znajdz_sale(p_numer_sali);
-    BEGIN
-        SELECT data_zabiegu INTO tmp_data_poczatku FROM zabiegi WHERE p_id_sali=sala;
-        SELECT spodziewany_czas_trwania INTO tmp_data_konca FROM zabiegi WHERE p_id_sali=sala;
-        EXCEPTION WHEN NO_DATA_FOUND THEN
-            tmp_data_poczatku:=NULL;
-            tmp_data_konca:=NULL;
-    END;
+    p_id_prowadzacego:=znajdz_id_pracownika(p_pesel_lekarza);
     IF p_id_sali IS NULL THEN
         RAISE nie_ma_sali;
-    ELSIF p_data_zabiegu>p_spodziewany_czas_trwania THEN
+    ELSIF p_data_zabiegu>p_spodziewane_zakonczenie THEN
         RAISE czas;
     ELSIF znajdz_rodzaj_sali(p_id_sali) NOT LIKE 'Zabiegowe' AND znajdz_rodzaj_sali(p_id_sali) NOT LIKE 'Operacyjne' THEN
         RAISE sala_nie_zabiegowa;
-    ELSIF (tmp_data_poczatku IS NOT NULL AND tmp_data_konca IS NOT NULL) OR (p_data_zabiegu>=tmp_data_poczatku AND p_data_zabiegu<=tmp_data_konca) OR p_spodziewany_czas_trwania>=tmp_data_poczatku THEN
-        RAISE sala_zajeta;
-    ELSE 
-        INSERT INTO zabiegi VALUES(p_id_zabiegu, p_data_zabiegu, p_typ_zabiegu, p_spodziewany_czas_trwania, p_id_sali);
+    ELSIF p_id_prowadzacego IS NULL THEN
+        RAISE nie_lekarz;
+    ELSIF znajdz_stanowisko(p_id_prowadzacego) NOT LIKE 'Lekarz' THEN
+        RAISE nie_lekarz;
     END IF;
+    OPEN cur_data_poczatku;
+    OPEN cur_koniec;
+    LOOP
+    FETCH cur_data_poczatku INTO tmp_data_poczatku;
+    FETCH cur_koniec INTO tmp_koniec;
+    EXIT WHEN cur_data_poczatku%NOTFOUND;
+    EXIT WHEN cur_koniec%NOTFOUND;
+    IF (tmp_data_poczatku IS NOT NULL AND tmp_koniec IS NOT NULL) AND ((p_data_zabiegu>=tmp_data_poczatku AND p_spodziewane_zakonczenie<=tmp_koniec)) THEN
+        RAISE sala_zajeta;
+    END IF;
+    END LOOP;
+    INSERT INTO zabiegi VALUES(p_id_zabiegu, p_data_zabiegu, p_typ_zabiegu, p_spodziewane_zakonczenie, p_id_sali);
+    INSERT INTO zab_prac VALUES(p_id_zabiegu, p_id_prowadzacego);
     EXCEPTION WHEN sala_zajeta THEN
         dbms_output.ENABLE;
         dbms_output.put_line('Ta sala jest juz zarezerwowana!');
@@ -341,13 +379,14 @@ BEGIN
     WHEN czas THEN
         dbms_output.ENABLE;
         dbms_output.put_line('Data konca zabiegu nie moze byc mniejsza nic data poczatku');
+    WHEN nie_lekarz THEN
+        dbms_output.ENABLE;
+        dbms_output.put_line('Prowadzacy zabieg musi istniec i byc lekarzem');
 END;
 /
-EXEC dodaj_zabieg(TO_DATE('2019/01/14', 'YYYY/MM/DD'), 'leczenie', TO_DATE('2019/01/16', 'YYYY/MM/DD'), '2a');
-select * from zabiegi;
 
--- Wypisujemy pacjentÃ³w z diagnozÄ… - zgon. 
-
+EXEC dodaj_zabieg(to_timestamp('20/01/2019 16:30', 'dd-mm-yyyy hh24:mi:ss'), 'leczenie', to_timestamp('20/01/2019 17:30', 'dd-mm-yyyy hh24:mi:ss'), '4a', 84070986833);
+-- Wypisujemy pacjentów z diagnoz¹ - zgon. 
 CREATE OR REPLACE PROCEDURE wypisz_martwych
 IS 
     CURSOR martwi_pacjenci IS SELECT * FROM karta_choroby WHERE karta_choroby.diagnoza = 'Zgon' FOR UPDATE;
@@ -370,7 +409,7 @@ BEGIN
     END LOOP;
 EXCEPTION WHEN No_Data_Found THEN
         dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstÄ™pnego.');    
+        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstêpnego.');    
 END;
 /
 
