@@ -37,9 +37,51 @@
 <h3>Przyjmij pacjenta</h3>
 
 <form action="/receive_patient" method="POST">
-    PESEL: <input type="number" name="patient_id" required><br>
+    <select name="patient_id" required>
+        {% for option in patient_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
     ODDZIAL: <input type="text" name="patient_ward" required><br>
     SALA: <input type="text" name="patient_room" required><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Wypisz pacjenta</h3>
+
+<form action="/unsubscibe-patient" method="POST">
+    <select name="patient_id" required>
+        {% for option  in patient_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Dodaj diagnozę</h3>
+
+<form action="/unsubscibe-patient" method="POST">
+    <select name="patient_id" required>
+        {% for option  in patient_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    DIAGNOZA: <input type="text" name="patient_diagnose" required><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Dodaj objawy</h3>
+
+<form action="/unsubscibe-patient" method="POST">
+    <select name="patient_id" required>
+        {% for option  in patient_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    OBJAW: <input type="text" name="patient_symptom" required><br>
     <input type="submit" value="Submit">
 </form>
 

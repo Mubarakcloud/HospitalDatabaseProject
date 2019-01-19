@@ -17,14 +17,28 @@ def prepare_views():
       connection.close()
       return views
 
+def prepare_patient_ids():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      cursor.execute('SELECT PESEL FROM pacjent')
+      ids = cursor.fetchall()
+      cursor.close()
+      connection.close()
+      return ids
+
 @app.route('/')
 def index():
       views = prepare_views()
+      ids = prepare_patient_ids()
       option_views = []
       for view in views:
             option_views.append(view[0])
+      option_ids = []
+      for idd in ids:
+            if (idd[0] != 0): # Don't want anonymized PESEL to show up.
+                  option_ids.append(idd[0])
 
-      return render_template('index.html', view_options=views)
+      return render_template('index.html', view_options=views, patient_ids=option_ids)
 
 @app.route('/views', methods=['POST'])
 def views():
@@ -49,9 +63,12 @@ def views():
             cursor.close()
             connection.close()
       else:
-            if parameter == None:
-                  return "Parametr musi być użyty"    
+            if parameter == None or parameter == '':
+                  return "Parametr musi być użyty"   
+            
             if current_view == "DYZURY_W_OKRESIE":
+                  if not parameter.isdigit():
+                        return "Okres musi być cyfrą."
   
                   connection = cx_Oracle.connect(db_user, db_password, db_connect)
                   cursor = connection.cursor()
@@ -70,7 +87,9 @@ def views():
                   connection.close()
 
             else:
-      
+                  if not parameter.isdigit():
+                        return "Pesel musi być cyfrą."
+
                   connection = cx_Oracle.connect(db_user, db_password, db_connect)
                   cursor = connection.cursor()
                   cursor.execute("SELECT * FROM %s WHERE %s.pesel = %d" % (current_view, current_view, int(parameter))) # Is it safe?
@@ -79,7 +98,7 @@ def views():
                   connection.close()
       
       return render_template("view_template.html", 
-                              cols=columns, view=current_view) # Need to escape?
+                              cols=columns, view=current_view)
 
 
 @app.route("/query", methods=["POST"])
@@ -107,8 +126,8 @@ def add_patient():
       if request.method != 'POST':
             return "Not correct method, use with POST."
       patient_id =      request.form["patient_id"]
-      if (len(patient_id) > 11):
-            return "PESEL składa się z maksymalnie 11 liczb"
+      if len(patient_id) > 11 or int(patient_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb i musi być dodatni"
 
       patient_id = int(patient_id)
       patient_name =    request.form["patient_name"]
@@ -143,7 +162,7 @@ def receive_patient():
             return "Not correct method, use with POST."
 
       patient_id = request.form["patient_id"]
-      if (len(patient_id) > 11):
+      if len(patient_id) > 11 or int(patient_id) <= 0:
             return "PESEL składa się z maksymalnie 11 liczb"
       patient_id = int(patient_id)
       patient_ward = request.form["patient_ward"]
@@ -165,6 +184,79 @@ def receive_patient():
       connection.close()
 
       return "Przyjęto pacjenta o PESELU %s do oddziału %s do sali %s" % (patient_id, patient_ward, patient_room)
+
+@app.route('/unsubscibe-patient', methods=["POST"])
+def unsubscibe_patient():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+
+      patient_id = request.form["patient_id"]
+      if len(patient_id) > 11 or int(patient_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb"
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+
+      try:
+            cursor.callproc("wypisz_pacjenta", [int(patient_id)])
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(error.message)
+
+      connection.commit()
+      connection.close()
+      return "Wypisano pacjenta o PESELU %s" % patient_id
+
+@app.route('/add_diagnose')
+def add_diagnose():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+
+      patient_id = request.form["patient_id"]
+      patient_diagnose = request.form["patient_diagnose"]
+      if len(patient_id) > 11 or int(patient_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb"
+
+      if patient_diagnose == None:
+            return "Diagnoza musi być podana"
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("wypisz_pacjenta", [int(patient_id), patient_diagnose])
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(error.message)
+
+      connection.commit()
+      connection.close()
+      return "Dodano diagnozę %s dla pacjenta o PESELU %s" % patient_diagnose, patient_id
+
+@app.route('/add_symptom')
+def add_symptom():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+
+      patient_id = request.form["patient_id"]
+      patient_symptom = request.form["patient_symptom"]
+      if len(patient_id) > 11 or int(patient_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb"
+
+      if patient_symptom == None:
+            return "Diagnoza musi być podana"
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("dodaj_objawy", [int(patient_id), patient_symptom])
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(error.message)
+
+      connection.commit()
+      connection.close()
+      return "Dodano symptomy %s dla pacjenta o PESELU %s" % patient_symptom, patient_id
+
 
 @app.route('/add_money')
 def add_money():
