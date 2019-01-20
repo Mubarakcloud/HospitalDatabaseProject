@@ -123,7 +123,7 @@ INSERT INTO Pacjent VALUES (73082781622, 'Bogus豉wa', 'Linda', TO_DATE('2018/02
 INSERT INTO Pacjent VALUES (73102672925, 'Rozalia', 'Cyrkon', TO_DATE('2019/01/02', 'yyyy/mm/dd'), '382371863');
 INSERT INTO Pacjent VALUES (53070577686, 'Iwona', 'Kajzerka', TO_DATE('2017/01/13', 'yyyy/mm/dd'), '995126457');
 INSERT INTO Pacjent VALUES (90061259387, 'Anna', 'Fatygowa', TO_DATE('2018/12/12', 'yyyy/mm/dd'), '266663539');
-INSERT INTO Pacjent VALUES (85062869592, 'Kacper', 'Korde趾a', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '352856740');
+INSERT INTO Pacjent VALUES (85062869592, 'Kacper','Korde趾a', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '352856740');
 INSERT INTO Pacjent VALUES (51101212652, 'Magda', 'Wressler', TO_DATE('2016/09/11', 'yyyy/mm/dd'), '777771216');
 
 --Karta choroby

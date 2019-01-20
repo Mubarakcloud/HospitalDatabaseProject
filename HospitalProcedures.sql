@@ -258,8 +258,7 @@ BEGIN
         dbms_output.put_line('Nie ma takiego pracownika');
 END;
 /
-/
-*/
+
 --dodaj zabieg
 CREATE OR REPLACE FUNCTION znajdz_sale(
     p_numer_sali sala.numer_sali%TYPE
@@ -393,6 +392,7 @@ END;
 /
 
 EXEC dodaj_zabieg(to_timestamp('20/01/2019 16:30', 'dd-mm-yyyy hh24:mi:ss'), 'leczenie', to_timestamp('20/01/2019 17:30', 'dd-mm-yyyy hh24:mi:ss'), '4a', 84070986833);
+
 -- Wypisujemy pacjentów z diagnoz¹ - zgon. 
 CREATE OR REPLACE PROCEDURE wypisz_martwych
 IS 

@@ -2,10 +2,17 @@
 
 <h2>{{ view }}</h2>
 
-{% for col in cols %}
-    <p>
-        {% for el  in col %}
-            {{ el }}
+<table style="width:100%">
+    <tr>
+        {% for td  in tds %}
+            <td> {{ td }} </td>
         {% endfor %}
-    </p>
-{% endfor %}
+    </tr>
+    {% for col in cols %}
+        <tr>
+            {% for el  in col %}
+                <th> {{ el }} </th>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table> 

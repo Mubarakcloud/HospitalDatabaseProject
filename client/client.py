@@ -1,5 +1,6 @@
 import os
 import cx_Oracle
+from datetime import datetime
 from flask import Flask, render_template, request
 
 db_user = 'HR'
@@ -26,19 +27,37 @@ def prepare_patient_ids():
       connection.close()
       return ids
 
+def preaper_doctor_ids():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      cursor.execute("SELECT PESEL FROM pracownik WHERE stanowisko = 'Lekarz'")
+      ids = cursor.fetchall()
+      cursor.close()
+      connection.close()
+      return ids      
+
+def nextword(target, source):
+      list_of_words = target.split(' ')
+      return list_of_words[list_of_words.index(source) + 1]
+
 @app.route('/')
 def index():
       views = prepare_views()
-      ids = prepare_patient_ids()
+      patient_ids = prepare_patient_ids()
+      doctor_ids = preaper_doctor_ids()
       option_views = []
       for view in views:
             option_views.append(view[0])
-      option_ids = []
-      for idd in ids:
+      patient_option_ids = []
+      for idd in patient_ids:
             if (idd[0] != 0): # Don't want anonymized PESEL to show up.
-                  option_ids.append(idd[0])
+                  patient_option_ids.append(idd[0])
 
-      return render_template('index.html', view_options=views, patient_ids=option_ids)
+      doctor_option_ids = []
+      for idd in doctor_ids:
+            doctor_option_ids.append(idd[0])
+      return render_template('index.html', view_options=views, patient_ids=patient_option_ids,
+                              doctor_ids=doctor_option_ids)
 
 @app.route('/views', methods=['POST'])
 def views():
@@ -114,9 +133,22 @@ def query():
       cursor.execute(' ' + query_text)
       columns = cursor.fetchall()
       cursor.close()
+
+      from_table = nextword(query_text.upper(), "FROM")
+
+      cursor_tmp = connection.cursor()
+      cursor_tmp.execute("SELECT table_name, column_name FROM USER_TAB_COLUMNS WHERE table_name = '%s'" % from_table)
+      table_names = cursor_tmp.fetchall()
+      print(table_names)
+      cursor_tmp.close()
+
+      table_names_option = []
+      for td in table_names:
+            table_names_option.append(td[1])      
+
       connection.close()
       return render_template("view_template.html", 
-                              cols=columns, 
+                              cols=columns, tds=table_names_option,
                               view="""Thank you for using custom query functionality. 
                                     Please do not abuse it.""")
 
@@ -207,7 +239,7 @@ def unsubscibe_patient():
       connection.close()
       return "Wypisano pacjenta o PESELU %s" % patient_id
 
-@app.route('/add_diagnose')
+@app.route('/add_diagnose', methods=["POST"])
 def add_diagnose():
       if request.method != 'POST':
             return "Not correct method, use with POST."
@@ -232,7 +264,7 @@ def add_diagnose():
       connection.close()
       return "Dodano diagnozę %s dla pacjenta o PESELU %s" % patient_diagnose, patient_id
 
-@app.route('/add_symptom')
+@app.route('/add_symptom', methods=["POST"])
 def add_symptom():
       if request.method != 'POST':
             return "Not correct method, use with POST."
@@ -257,6 +289,82 @@ def add_symptom():
       connection.close()
       return "Dodano symptomy %s dla pacjenta o PESELU %s" % patient_symptom, patient_id
 
+
+@app.route('/add_examination', methods=["POST"])
+def add_examination():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+
+      examination_date = request.form['date']
+      examination_hour = request.form['hour']
+      patient_id = request.form["patient_id"]
+      height = request.form['height']
+      heart_rate = request.form['heart_rate']
+      notes = request.form['notes']
+      flag = request.form['flag']
+      doctor_id = request.form["doctor_id"]
+
+      if examination_date == None or examination_hour == None:
+            return "Podaj datę, godzinę badania"
+
+       # 2019-01-02
+      # 13:01
+      date = examination_date + ' ' + examination_hour
+      datetime_object = datetime.strptime(date, '%Y-%m-%d %H:%M')
+
+      if len(patient_id) > 11 or int(patient_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb"
+
+      if not height.isdigit() or int(height) <0:
+            return "Wysokość musi być liczbą dodatnią"
+      height = int(height)
+
+      if not heart_rate.isdigit() or int(heart_rate) <0:
+            return "Tętno musi być liczbą dodatnią"
+      heart_rate = int(heart_rate)
+
+      if notes == None:
+            return "Uzupełnij uwagi"
+
+      print(flag)
+      if not flag.isdigit() or int(flag) not in [0, 1]:
+            return "Flaga jest 0 lub 1"
+      flag = int(flag)
+      
+      if len(doctor_id) > 11 or int(doctor_id) <= 0:
+            return "PESEL składa się z maksymalnie 11 liczb"
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("dodaj_badanie", [datetime_object, patient_id, height, heart_rate, notes, flag, doctor_id])
+                  
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print("Error: " + error.message)
+            connection.commit()
+            connection.close()  
+            return "Nie udało się dodać badania"
+
+      connection.commit()
+      connection.close()      
+
+      return "Dodano badanie."
+
+
+@app.route('/unsubscribe_deaths')
+def unsubscribe_deaths():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("wypisz_martwych")
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(error.message)
+
+      connection.commit()
+      connection.close()
+      return "Wypisano pacjentów z diagnozą zgon" 
 
 @app.route('/add_money')
 def add_money():

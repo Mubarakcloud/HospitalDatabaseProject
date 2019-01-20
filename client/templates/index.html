@@ -62,7 +62,7 @@
 <br>
 <h3>Dodaj diagnozę</h3>
 
-<form action="/unsubscibe-patient" method="POST">
+<form action="/add_diagnose" method="POST">
     <select name="patient_id" required>
         {% for option  in patient_ids %}
             <option value="{{ option }}">{{ option }}</option>
@@ -75,7 +75,7 @@
 <br>
 <h3>Dodaj objawy</h3>
 
-<form action="/unsubscibe-patient" method="POST">
+<form action="/add_symptom" method="POST">
     <select name="patient_id" required>
         {% for option  in patient_ids %}
             <option value="{{ option }}">{{ option }}</option>
@@ -84,6 +84,35 @@
     OBJAW: <input type="text" name="patient_symptom" required><br>
     <input type="submit" value="Submit">
 </form>
+
+<br>
+<h3>Dodaj badanie</h3>
+
+<form action="/add_examination" method="POST">
+    DATA:  <input type="date" name="date" placeholder="dd/mm/yyyy" required><br>
+    GODZINA:  <input type="time" name="hour" required><br>
+    PESEL: <select name="patient_id" required>
+        {% for option  in patient_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    WZROST: <input type="number" name="height" required><br>
+    TĘTNO: <input type="number" name="heart_rate" required><br>
+    UWAGI: <input type="text" name="notes" required><br>
+    CZY WSTĘPNE: <input type="number" name="flag" required><br>
+    PESEL DOKTORA <select name="doctor_id" required>
+        {% for option  in doctor_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Wypisz pacjentów z diagnozą zgon</h3>
+
+<form action="/unsubscribe_deaths">
+    <input type="Submit" value="Submit">
 
 <br>
 <h3>Dodaj dodatek premium</h3>
