@@ -216,7 +216,7 @@ def receive_patient():
 
       return "Przyjęto pacjenta o PESELU %s do oddziału %s do sali %s" % (patient_id, patient_ward, patient_room)
 
-@app.route('/unsubscibe-patient', methods=["POST"])
+@app.route('/unsubscibe_patient', methods=["POST"])
 def unsubscibe_patient():
       if request.method != 'POST':
             return "Not correct method, use with POST."
@@ -254,14 +254,14 @@ def add_diagnose():
       connection = cx_Oracle.connect(db_user, db_password, db_connect)
       cursor = connection.cursor()
       try:
-            cursor.callproc("wypisz_pacjenta", [int(patient_id), patient_diagnose])
+            cursor.callproc("dodaj_diagnoze", [int(patient_id), patient_diagnose])
       except cx_Oracle.DatabaseError as e:
             error, = e.args
             print(error.message)
 
       connection.commit()
       connection.close()
-      return "Dodano diagnozę %s dla pacjenta o PESELU %s" % patient_diagnose, patient_id
+      return "Dodano diagnozę %s dla pacjenta o PESELU %s" % (patient_diagnose, patient_id)
 
 @app.route('/add_symptom', methods=["POST"])
 def add_symptom():
@@ -286,7 +286,7 @@ def add_symptom():
 
       connection.commit()
       connection.close()
-      return "Dodano symptomy %s dla pacjenta o PESELU %s" % patient_symptom, patient_id
+      return "Dodano symptomy %s dla pacjenta o PESELU %s" % (patient_symptom, patient_id)
 
 
 @app.route('/add_examination', methods=["POST"])

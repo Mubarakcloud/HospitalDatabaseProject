@@ -1,18 +1,31 @@
 <!doctype html>
 
-<h2>{{ view }}</h2>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
 
-<table style="width:100%">
-    <tr>
-        {% for td  in tds %}
-            <td> {{ td }} </td>
-        {% endfor %}
-    </tr>
-    {% for col in cols %}
+  <title>Hospital Project</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <h2>{{ view }}</h2>
+
+    <table class="pure-table pure-table-bordered">
         <tr>
-            {% for el  in col %}
-                <th> {{ el }} </th>
+            {% for td  in tds %}
+                <td> {{ td }} </td>
             {% endfor %}
         </tr>
-    {% endfor %}
-</table> 
+        {% for col in cols %}
+            <tr>
+                {% for el  in col %}
+                    <th> {{ el }} </th>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table> 
+</body>
+</html>

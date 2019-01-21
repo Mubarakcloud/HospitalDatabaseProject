@@ -1,148 +1,328 @@
 <!doctype html>
 
-<h2>Witamy w szalonym szpitalu.<h2>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
 
-<h3>Nasze widoki </h3>
+  <title>Hospital Project</title>
 
-<form action="/views" method="POST">
-    <select name="view_name" required>
-        {% for option  in view_options %}
-            <option value="{{ option[0] }}">{{ option[0] }}</option>
-        {% endfor %}
-    </select><br>
-    Dodatkowy parametr: <input type="text" name="parameter">
-    <input type="submit" value="Submit">
-</form>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 
-<br>
-<h3>Custom query functionality</h3>
+</head>
 
-<form action="/query" method="POST">
-    <input type="text" name="query" required>
-    <input type="submit" value="Submit">
-</form>
+<body>
 
-<br>
-<h3>Dodaj pacjenta</h3>
+    <h3>Nasze widoki </h3>
 
-<form action="/add_patient" method="POST">
-    PESEL: <input type="number" name="patient_id" required><br>
-    IMIE: <input type="text" name="patient_name" required><br>
-    NAZWISKO: <input type="text" name="patient_surname" required><br>
-    NUMER TELEFONU: <input type="text" name="patient_phone_number" required><br>
-    <input type="submit" value="Submit">
-</form>
+    <form class="pure-form pure-form-aligned" action="/views" method="POST">
 
-<br>
-<h3>Przyjmij pacjenta</h3>
+            <div class="pure-g">
+                    <div class="pure-u-1-3">
+                            <small>
+                                    Widok PACJENCI_NA_MIEJSCU nie wymaga dodatkowe parametru. Widok DYZURY_W_OKRESIE wymaga podania dni jako liczba. Widok PRACOWNICY_ODDZIALU wymaga podaniu nazwy oddziału. Reszta widoków potrzebuje nr pesel.
+                                </small>
+                    </div>
+                </div>
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="views">Widok</label>
+                <select name="view_name" class="views"required>
+                    {% for option  in view_options %}
+                        <option value="{{ option[0] }}">{{ option[0] }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
+    
+            <div class="pure-control-group">
+                <label for="parameter">Dodatkowy parametr</label>
+                <input class="parameter" name="parameter">
+            </div>
 
-<form action="/receive_patient" method="POST">
-    <select name="patient_id" required>
-        {% for option in patient_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    ODDZIAL: <input type="text" name="patient_ward" required><br>
-    SALA: <input type="text" name="patient_room" required><br>
-    <input type="submit" value="Submit">
-</form>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Custom query functionality</h3>
 
-<br>
-<h3>Wypisz pacjenta</h3>
+    <form class="pure-form pure-form-aligned" action="/query" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="query">Zapytanie</label>
+                <input type="query" name="query" required>
+            </div>
 
-<form action="/unsubscibe-patient" method="POST">
-    <select name="patient_id" required>
-        {% for option  in patient_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    <input type="submit" value="Submit">
-</form>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Dodaj pacjenta</h3>
 
-<br>
-<h3>Dodaj diagnozę</h3>
+    <form class="pure-form pure-form-aligned" action="/add_patient" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="pesel">Pesel</label>
+                <input type="number" name="patient_id" class="pesel" required>
+            </div>
+    
+            <div class="pure-control-group">
+                <label for="name">Imie</label>
+                <input type="text" class="name" name="patient_name" required>
+            </div>
 
-<form action="/add_diagnose" method="POST">
-    <select name="patient_id" required>
-        {% for option  in patient_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    DIAGNOZA: <input type="text" name="patient_diagnose" required><br>
-    <input type="submit" value="Submit">
-</form>
+            <div class="pure-control-group">
+                    <label for="surname">Nazwisko</label>
+                    <input type="text" class="surname" name="patient_surname" required>
+            </div>
 
-<br>
-<h3>Dodaj objawy</h3>
+            <div class="pure-control-group">
+                    <label for="surname">Numer telefonu</label>
+                    <input type="text" class="surname" name="patient_phone_number" required>
+            </div>
 
-<form action="/add_symptom" method="POST">
-    <select name="patient_id" required>
-        {% for option  in patient_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    OBJAW: <input type="text" name="patient_symptom" required><br>
-    <input type="submit" value="Submit">
-</form>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Przyjmij pacjenta</h3>
 
-<br>
-<h3>Dodaj badanie</h3>
 
-<form action="/add_examination" method="POST">
-    DATA:  <input type="date" name="date" placeholder="dd/mm/yyyy" required><br>
-    GODZINA:  <input type="time" name="hour" required><br>
-    PESEL: <select name="patient_id" required>
-        {% for option  in patient_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    WZROST: <input type="number" name="height" required><br>
-    TĘTNO: <input type="number" name="heart_rate" required><br>
-    UWAGI: <input type="text" name="notes" required><br>
-    CZY WSTĘPNE: <input type="number" name="flag" required><br>
-    PESEL DOKTORA <select name="doctor_id" required>
-        {% for option  in doctor_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    <input type="submit" value="Submit">
-</form>
+    <form class="pure-form pure-form-aligned" action="/receive_patient" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="patient_id">Pesel pacjenta</label>
+                <select name="patient_id" class="patient_id" required>
+                    {% for option in patient_ids %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
 
-<br>
-<h3>Dodaj zabieg</h3>
+            <div class="pure-control-group">
+                    <label for="ward">Oddział</label>
+                    <input type="text" class="ward" name="patient_ward" required>
+            </div>
 
-<form action="/add_intervention" method="POST">
-    DATA ROZPOCZĘCIA:  <input type="date" name="start_date" placeholder="dd/mm/yyyy" required><br>
-    GODZINA ROZPOCZĘCIA:  <input type="time" name="start_hour" required><br>
-    TYP ZABIEGU: <input type="text" name="type" required><br>
-    DATA ZAKOŃCZENIA:  <input type="date" name="end_date" placeholder="dd/mm/yyyy" required><br>
-    GODZINA ZAKOŃCZENIA:  <input type="time" name="end_hour" required><br>
-    SALA: <input type="text" name="room" required><br>
-    PESEL DOKTORA <select name="doctor_id" required>
-        {% for option  in doctor_ids %}
-            <option value="{{ option }}">{{ option }}</option>
-        {% endfor %}
-    </select><br>
-    <input type="submit" value="Submit">
-</form>
+            <div class="pure-control-group">
+                    <label for="room">Sala</label>
+                    <input type="text" class="room" name="patient_room" required>
+            </div>
 
-<br>
-<h3>Zamów leki</h3>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
 
-<form action="/order_drugs">
-    <input type="Submit" value="Submit">
-</form>
+    <br>
+    <h3>Wypisz pacjenta</h3>
 
-<br>
-<h3>Wypisz pacjentów z diagnozą zgon</h3>
+    <form class="pure-form pure-form-aligned" action="/unsubscibe_patient" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="patient_id">Pesel pacjenta</label>
+                <select name="patient_id" class="patient_id" required>
+                    {% for option in patient_ids %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
 
-<form action="/unsubscribe_deaths">
-    <input type="Submit" value="Submit">
-</form>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Dodaj diagnozę</h3>
+    
+    <form class="pure-form pure-form-aligned" action="/add_diagnose" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="patient_id">Pesel pacjenta</label>
+                <select name="patient_id" class="patient_id" required>
+                    {% for option in patient_ids %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
+        
+            <div class="pure-control-group">
+                    <label for="diagnose">Diagnoza</label>
+                    <input type="text" class="diagnose" name="patient_diagnose" required>
+            </div>
 
-<br>
-<h3>Dodaj dodatek premium</h3>
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Dodaj objawy</h3>
 
-<form action="/add_money">
-    <input type="Submit" value="Submit">
-</form>
+
+    <form class="pure-form pure-form-aligned" action="/add_symptom" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="patient_id">Pesel pacjenta</label>
+                <select name="patient_id" class="patient_id" required>
+                    {% for option in patient_ids %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select><br>
+            </div>
+        
+            <div class="pure-control-group">
+                    <label for="symptom">Symptom</label>
+                    <input type="text" class="symptom" name="patient_symptom" required>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <br>
+    <h3>Dodaj badanie</h3>
+    
+    <form class="pure-form pure-form-aligned" action="/add_examination" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="date">Data</label>
+                <input type="date" name="date" placeholder="dd/mm/yyyy" class="date" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="time">Godzina</label>
+                    <input type="time" name="hour" class="time" required>
+             </div>
+
+             <div class="pure-control-group">
+                    <label for="patient_id">Pesel pacjenta</label>
+                    <select name="patient_id" class="patient_id" required>
+                        {% for option in patient_ids %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select><br>
+                </div>
+
+             <div class="pure-control-group">
+                    <label for="height">Wzorst</label>
+                    <input type="text" class="height" name="height" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="heart_rate">Tętno</label>
+                    <input type="text" class="heart_rate" name="heart_rate" required>
+            </div>
+            
+            <div class="pure-control-group">
+                    <label for="notes">Uwagi</label>
+                    <input type="text" class="notes" name="notes" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="flag">Czy wstępne</label>
+                    <input type="number" class="flag" name="flag" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="doctor_id">Pesel doktora</label>
+                    <select name="doctor_id" class="doctor_id" required>
+                        {% for option in doctor_ids %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select><br>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <br>
+    <h3>Dodaj zabieg</h3>
+
+    <form class="pure-form pure-form-aligned" action="/add_intervention" method="POST">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="start_date">Data rozpoczęcia</label>
+                <input type="date" name="start_date" placeholder="dd/mm/yyyy" class="start_date" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="start_hour">Godzina rozpoczęcia</label>
+                    <input type="time" name="start_hour" class="start_hour" required>
+             </div>
+
+             <div class="pure-control-group">
+                    <label for="type">Typ zabiegu</label>
+                    <input type="text" class="type" name="type" required>
+            </div>
+
+            <div class="pure-control-group">
+                    <label for="end_date">Data zakończenia</label>
+                    <input type="date" name="end_date" placeholder="dd/mm/yyyy" class="end_date" required>
+                </div>
+    
+                <div class="pure-control-group">
+                        <label for="end_hour">Godzina zakończenia</label>
+                        <input type="time" name="end_hour" class="end_hour" required>
+                 </div>
+
+            <div class="pure-control-group">
+                <label for="room">Sala</label>
+                <input type="text" class="room" name="room" required>
+            </div>
+    
+            <div class="pure-control-group">
+                    <label for="doctor_id">Pesel doktora</label>
+                    <select name="doctor_id" class="doctor_id" required>
+                        {% for option in doctor_ids %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select><br>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+        </fieldset>
+    </form>
+    
+    <br>
+    <h3>Zamów leki</h3>
+    
+    <form action="/order_drugs">
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+    
+    <br>
+    <h3>Wypisz pacjentów z diagnozą zgon</h3>
+    
+    <form action="/unsubscribe_deaths">
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+    
+    <br>
+    <h3>Dodaj dodatek premium</h3>
+    
+    <form action="/add_money">
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+    
+
+</body>
+</html>
