@@ -109,13 +109,40 @@
 </form>
 
 <br>
+<h3>Dodaj zabieg</h3>
+
+<form action="/add_intervention" method="POST">
+    DATA ROZPOCZĘCIA:  <input type="date" name="start_date" placeholder="dd/mm/yyyy" required><br>
+    GODZINA ROZPOCZĘCIA:  <input type="time" name="start_hour" required><br>
+    TYP ZABIEGU: <input type="text" name="type" required><br>
+    DATA ZAKOŃCZENIA:  <input type="date" name="end_date" placeholder="dd/mm/yyyy" required><br>
+    GODZINA ZAKOŃCZENIA:  <input type="time" name="end_hour" required><br>
+    SALA: <input type="text" name="room" required><br>
+    PESEL DOKTORA <select name="doctor_id" required>
+        {% for option  in doctor_ids %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<h3>Zamów leki</h3>
+
+<form action="/order_drugs">
+    <input type="Submit" value="Submit">
+</form>
+
+<br>
 <h3>Wypisz pacjentów z diagnozą zgon</h3>
 
 <form action="/unsubscribe_deaths">
     <input type="Submit" value="Submit">
+</form>
 
 <br>
 <h3>Dodaj dodatek premium</h3>
 
 <form action="/add_money">
     <input type="Submit" value="Submit">
+</form>

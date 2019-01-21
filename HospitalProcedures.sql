@@ -404,19 +404,32 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE PROCEDURE karty_bez_badania_wstepnego
+CREATE OR REPLACE FUNCTION oblicz_ilosc_podan(id_szuk_leku NUMBER)
+RETURN NUMBER
 IS
-    CURSOR karta_choroby_cur IS SELECT * FROM karta_choroby;
-    pacjent_bez_badania_wstepnego karta_choroby%ROWTYPE;
-    row_badanie badanie%ROWTYPE;
+    ilosc_podawan NUMBER;
 BEGIN
-    FOR tmp IN karta_choroby_cur LOOP
-        pacjent_bez_badania_wstepnego := tmp;
-        SELECT * INTO row_badanie FROM badanie WHERE tmp.id_karty = badanie.id_karty;
+    SELECT count(*) INTO ilosc_podawan FROM kart_lek WHERE podany_lek = id_szuk_leku GROUP BY podany_lek;
+    RETURN ilosc_podawan;
+    EXCEPTION WHEN No_Data_Found THEN
+        RETURN 0;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE leki_do_zamowienia
+IS
+    CURSOR lek_cur IS SELECT * FROM leki WHERE dostepnosc = 0;
+    ilosc_podawan NUMBER;
+BEGIN
+    FOR tmp IN lek_cur LOOP
+        ilosc_podawan := oblicz_ilosc_podan(tmp.id_leku);
+        IF ilosc_podawan > 2 THEN
+            UPDATE leki SET leki.uwagi = 'Zamówić, pline!' WHERE leki.id_leku = tmp.id_leku;
+        ELSE
+            UPDATE leki SET leki.uwagi = 'Zamówić' WHERE leki.id_leku = tmp.id_leku;
+        END IF;
     END LOOP;
-EXCEPTION WHEN No_Data_Found THEN
-        dbms_output.ENABLE;
-        dbms_output.put_line('Pacjent o id karty ' || pacjent_bez_badania_wstepnego.id_karty || ' nie ma  badania wstêpnego.');    
+    
 END;
 /
 

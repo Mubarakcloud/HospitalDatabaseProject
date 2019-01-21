@@ -139,7 +139,6 @@ def query():
       cursor_tmp = connection.cursor()
       cursor_tmp.execute("SELECT table_name, column_name FROM USER_TAB_COLUMNS WHERE table_name = '%s'" % from_table)
       table_names = cursor_tmp.fetchall()
-      print(table_names)
       cursor_tmp.close()
 
       table_names_option = []
@@ -307,7 +306,7 @@ def add_examination():
       if examination_date == None or examination_hour == None:
             return "Podaj datę, godzinę badania"
 
-       # 2019-01-02
+      # 2019-01-02
       # 13:01
       date = examination_date + ' ' + examination_hour
       datetime_object = datetime.strptime(date, '%Y-%m-%d %H:%M')
@@ -351,13 +350,67 @@ def add_examination():
 
       return "Dodano badanie."
 
+@app.route('/add_intervention', methods=["POST"])
+def add_intervention():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."
+
+      start_date = request.form['start_date']
+      start_hour = request.form['start_hour']
+      end_date = request.form['end_date']
+      end_hour = request.form['end_hour']
+      type_ex = request.form['type']
+      room = request.form['room']
+      doctor_id = request.form["doctor_id"]
+
+      if start_date == None or start_hour == None:
+            return "Podaj datę, godzinę rozpoczęcia"
+
+      if end_date == None or end_hour == None:
+            return "Podaj datę, godzinę zakończenia"
+
+      datetime_start = datetime.strptime(start_date + ' ' + start_hour, '%Y-%m-%d %H:%M')
+      datetime_end = datetime.strptime(end_date + ' ' + end_hour, '%Y-%m-%d %H:%M')
+
+      if type_ex == None or room == None or doctor_id == None:
+            return "Uzupełnij wszystkie dane w formularzu."
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("dodaj_zabieg", [datetime_start, type_ex, datetime_end, room, doctor_id])
+                  
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print("Error: " + error.message)
+            connection.commit()
+            connection.close()  
+            return "Nie udało się dodać zabiegu"
+
+      connection.commit()
+      connection.close()
+      return "Dodano zabieg"   
+
+@app.route('/order_drugs')
+def order_drugs():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      try:
+            cursor.callproc("leki_do_zamowienia")
+      except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(error.message)
+
+      connection.commit()
+      connection.close()
+      return "Zamówiono leki których ilość była niewystarczająca."    
 
 @app.route('/unsubscribe_deaths')
 def unsubscribe_deaths():
       connection = cx_Oracle.connect(db_user, db_password, db_connect)
       cursor = connection.cursor()
       try:
-            cursor.callproc("wypisz_martwych")
+            cursor.callproc("leki_do_zamowienia")
       except cx_Oracle.DatabaseError as e:
             error, = e.args
             print(error.message)
