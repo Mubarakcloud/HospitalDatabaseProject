@@ -37,7 +37,7 @@
             <div class="pure-g">
                     <div class="pure-u-1-3">
                             <small>
-                                    Widok PACJENCI_NA_MIEJSCU nie wymaga dodatkowe parametru. Widok DYZURY_W_OKRESIE wymaga podania dni jako liczba. Widok PRACOWNICY_ODDZIALU wymaga podaniu nazwy oddziału. Reszta widoków potrzebuje nr pesel.
+                                    Widok PACJENCI_NA_MIEJSCU oraz ZABIEGI_DZISIAJ oraz ZAPLANOWANE_ZABIEGI nie wymaga dodatkowe parametru. Widok DYZURY_W_OKRESIE wymaga podania dni jako liczba. Widok PRACOWNICY_ODDZIALU wymaga podaniu nazwy oddziału. Reszta widoków potrzebuje nr pesel.
                                 </small>
                     </div>
                 </div>
@@ -323,22 +323,28 @@
     <br>
     <h3>Zamów leki</h3>
     
-    <form action="/order_drugs">
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    <form class="pure-form pure-form-aligned" action="/order_drugs">
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
     </form>
     
     <br>
     <h3>Wypisz pacjentów z diagnozą zgon</h3>
     
-    <form action="/unsubscribe_deaths">
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    <form class="pure-form pure-form-aligned" action="/unsubscribe_deaths">
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
     </form>
     
     <br>
     <h3>Dodaj dodatek premium</h3>
     
-    <form action="/add_money">
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    <form class="pure-form pure-form-aligned" action="/add_money">
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
     </form>
     
 

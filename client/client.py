@@ -109,7 +109,7 @@ def views():
             return "Non existent view: " + current_view
 
       parameter = request.form['parameter']
-      if current_view == "PACJENCI_NA_MIEJSCU":
+      if current_view == "PACJENCI_NA_MIEJSCU" or current_view == "ZABIEGI_DZISIAJ" or current_view == "ZAPLANOWANE_ZABIEGI":
             connection = cx_Oracle.connect(db_user, db_password, db_connect)
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM %s" % (current_view)) # Is it safe?
@@ -445,7 +445,7 @@ def unsubscribe_deaths():
       connection = cx_Oracle.connect(db_user, db_password, db_connect)
       cursor = connection.cursor()
       try:
-            cursor.callproc("leki_do_zamowienia")
+            cursor.callproc("wypisz_martwych")
       except cx_Oracle.DatabaseError as e:
             error, = e.args
             print(error.message)
