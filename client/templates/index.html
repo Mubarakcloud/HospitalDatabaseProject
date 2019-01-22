@@ -12,8 +12,26 @@
 
 <body>
 
-    <h3>Nasze widoki </h3>
+    <h3>Nasze tabele</h3>
+    <form class="pure-form pure-form-aligned" action="/tables" method="POST">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="table_name">Tabele</label>
+            <select name="table_name" class="table_name"required>
+                {% for option  in tbs %}
+                    <option value="{{ option[0] }}">{{ option[0] }}</option>
+                {% endfor %}
+            </select><br>
+        </div>
 
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary">Submit</button>
+        </div>
+    </fieldset>
+    </form>
+
+
+    <h3>Nasze widoki </h3>
     <form class="pure-form pure-form-aligned" action="/views" method="POST">
 
             <div class="pure-g">

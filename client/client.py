@@ -27,7 +27,7 @@ def prepare_patient_ids():
       connection.close()
       return ids
 
-def preaper_doctor_ids():
+def prepare_doctor_ids():
       connection = cx_Oracle.connect(db_user, db_password, db_connect)
       cursor = connection.cursor()
       cursor.execute("SELECT PESEL FROM pracownik WHERE stanowisko = 'Lekarz'")
@@ -35,6 +35,15 @@ def preaper_doctor_ids():
       cursor.close()
       connection.close()
       return ids      
+
+def prepare_tables():
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      cursor.execute("SELECT table_name from user_tables")
+      tables = cursor.fetchall()
+      cursor.close()
+      connection.close()
+      return tables            
 
 def nextword(target, source):
       list_of_words = target.split(' ')
@@ -44,7 +53,8 @@ def nextword(target, source):
 def index():
       views = prepare_views()
       patient_ids = prepare_patient_ids()
-      doctor_ids = preaper_doctor_ids()
+      doctor_ids = prepare_doctor_ids()
+      tables = prepare_tables()
       option_views = []
       for view in views:
             option_views.append(view[0])
@@ -56,8 +66,33 @@ def index():
       doctor_option_ids = []
       for idd in doctor_ids:
             doctor_option_ids.append(idd[0])
+      tables_option = []
+      for table in tables:
+            tables_option.append(table)
+
       return render_template('index.html', view_options=views, patient_ids=patient_option_ids,
-                              doctor_ids=doctor_option_ids)
+                              doctor_ids=doctor_option_ids, tbs=tables_option)
+
+@app.route('/tables', methods=["POST"])
+def tables():
+      if request.method != 'POST':
+            return "Not correct method, use with POST."     
+
+      table_name = request.form.get('table_name')
+      if table_name == None:
+            return "Didn't specify table name."
+
+      connection = cx_Oracle.connect(db_user, db_password, db_connect)
+      cursor = connection.cursor()
+      cursor.execute("SELECT * FROM %s" % table_name) # Is it safe?
+      tables_inside = cursor.fetchall()
+      cursor.close()
+      connection.close()
+
+      return render_template("view_template.html", 
+                              cols=tables_inside, view=table_name)
+
+      
 
 @app.route('/views', methods=['POST'])
 def views():
